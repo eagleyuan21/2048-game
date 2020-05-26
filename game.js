@@ -453,33 +453,62 @@ function checkKey(e) {
     e = e || window.event;
 
     if (e.keyCode == '38') {
-        shiftUp();
-        if(compare(temp))
-        {
-        	genNew();
-        }
+    	if(checkOver(temp))
+       {
+    		end();
+       }
+       else{
+       		shiftUp();
+       		if(compare(temp))
+       		{
+        		genNew();
+       		}
+       }
     }
     else if (e.keyCode == '40') {
-        shiftDown();
-        if(compare(temp))
-        {
-        	genNew();
-        }
+    	if(checkOver(temp))
+       {
+    		end();
+       }
+       else{
+       		shiftDown();
+       		if(compare(temp))
+       		{
+        		genNew();
+       		}
+       }
     }
     else if (e.keyCode == '37') {
-       shiftLeft();
-       if(compare(temp))
+       if(checkOver(temp))
        {
-        	genNew();
+    		end();
+       }
+       else{
+       		shiftLeft();
+       		if(compare(temp))
+       		{
+        		genNew();
+       		}
        }
     }
     else if (e.keyCode == '39') {
-       shiftRight();
-       if(compare(temp))
+       if(checkOver(temp))
        {
-        	genNew();
+    		end();
+       }
+       else{
+       		shiftRight();
+       		if(compare(temp))
+       		{
+        		genNew();
+       		}
        }
     }
+}
+
+function end()
+{
+	alert("GAME OVER");
 }
 
 function genNew()
@@ -521,12 +550,44 @@ function compare(t)
 	return false;
 }
 
+function checkOver(t)
+{
+	for(var i = 0; i < 4; i++)
+	{
+		for(var j = 0; j < 4; j++)
+		{
+			if(t[i][j] == 0 || checkNeighbors(i, j, t))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+function checkNeighbors(x, y, t)
+{
+	var neigh = [x + 1, x - 1, y + 1, y - 1];
+	for(var i = 0; i < 4; i++)
+	{
+		if(neigh[i] < 0)
+		{
+			neigh[i] = 1;
+		}
+		if(neigh[i] > 3)
+		{
+			neigh[i] = 2;
+		}
+	}
+	var output = (t[x][y] == t[neigh[0]][y]) || (t[x][y] == t[neigh[1]][y]) || (t[x][y] == t[x][neigh[2]]) || (t[x][y] == t[x][neigh[3]]);
+	return output;
+}
+
 function updateGame()
 {
 	myGameArea.clear();
 	grid();
 	
 	document.onkeydown = checkKey;
-
 	drawGame();
 }
