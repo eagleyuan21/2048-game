@@ -8,10 +8,25 @@ function startGame() {
 var myGameArea = {
 	canvas : document.createElement("canvas"),
     start : function() {
-    	this.canvas.width = 600;
     	sum = 0;
     	document.getElementById("scores").innerHTML = "Score: " + sum.toString();
-        this.canvas.height = 600;
+  		var dim;
+  		if(window.innerWidth > window.innerHeight)
+  		{
+  			dim = window.innerHeight - 20;
+  		}
+  		else if(window.innerWidth <= window.innerHeight)
+  		{
+  			dim = window.innerWidth - 20;
+  		}
+		if(dim > 600)
+		{
+			dim = 600;
+		}
+  		this.canvas.style.width  = dim.toString() + "px";
+  		this.canvas.style.height = dim.toString() + "px";
+  		this.canvas.width  = "600";
+  		this.canvas.height = "600";
         this.canvas.style.opacity = "1";
     	this.context = this.canvas.getContext("2d");
     	document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -199,7 +214,7 @@ function getColor(val)
   			colcode = "#8B0000";
   			break;
   		case 6:
-  			colcode = "#BC8F8F";
+  			colcode = "#008080";
   			break;
   		case 7:
   			colcode = "#DAA520";
