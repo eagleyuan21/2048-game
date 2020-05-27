@@ -1,4 +1,5 @@
 var content;
+var sum;
 
 function startGame() {
 	myGameArea.start();
@@ -8,7 +9,10 @@ var myGameArea = {
 	canvas : document.createElement("canvas"),
     start : function() {
     	this.canvas.width = 600;
+    	sum = 0;
+    	document.getElementById("scores").innerHTML = "Score: " + sum.toString();
         this.canvas.height = 600;
+        this.canvas.style.opacity = "1";
     	this.context = this.canvas.getContext("2d");
     	document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     	this.interval = setInterval(updateGame, 20);
@@ -255,6 +259,8 @@ function shiftLeft()
 			if(content[i][l] == content[i][l + 1])
 			{
 				content[i][l] = 2 * content[i][l];
+				sum = sum + content[i][l];
+				document.getElementById("scores").innerHTML = "Score: " + sum.toString();
 				content[i][l + 1] = 0;
 			}
 		}
@@ -307,6 +313,8 @@ function shiftRight()
 			if(content[i][l] == content[i][l - 1])
 			{
 				content[i][l] = 2 * content[i][l];
+				sum = sum + content[i][l];
+				document.getElementById("scores").innerHTML = "Score: " + sum.toString();
 				content[i][l - 1] = 0;
 			}
 		}
@@ -362,6 +370,8 @@ function shiftUp()
 			if(content[l][j] == content[l + 1][j])
 			{
 				content[l][j] = 2 * content[l][j];
+				sum = sum + content[l][j];
+				document.getElementById("scores").innerHTML = "Score: " + sum.toString();
 				content[l + 1][j] = 0;
 			}
 		}
@@ -420,6 +430,8 @@ function shiftDown()
 			if(content[l][j] == content[l - 1][j])
 			{
 				content[l][j] = 2 * content[l][j];
+				sum = sum + content[l][j];
+				document.getElementById("scores").innerHTML = "Score: " + sum.toString();
 				content[l - 1][j] = 0;
 			}
 		}
@@ -452,63 +464,43 @@ function checkKey(e) {
 	});
     e = e || window.event;
 
-    if (e.keyCode == '38') {
-    	if(checkOver(temp))
-       {
-    		end();
-       }
-       else{
-       		shiftUp();
-       		if(compare(temp))
-       		{
-        		genNew();
-       		}
-       }
+    if (e.keyCode == '38' || e.keyCode == '87') {
+    	shiftUp();
+       	if(compare(temp))
+    	{
+        	genNew();
+       	}
     }
-    else if (e.keyCode == '40') {
-    	if(checkOver(temp))
-       {
-    		end();
-       }
-       else{
-       		shiftDown();
-       		if(compare(temp))
-       		{
-        		genNew();
-       		}
-       }
+    else if (e.keyCode == '40' || e.keyCode == '83') {
+		shiftDown();
+       	if(compare(temp))
+    	{
+        	genNew();
+       	}
     }
-    else if (e.keyCode == '37') {
-       if(checkOver(temp))
-       {
-    		end();
-       }
-       else{
-       		shiftLeft();
-       		if(compare(temp))
-       		{
-        		genNew();
-       		}
-       }
+    else if (e.keyCode == '37' || e.keyCode == '65') {
+       	shiftLeft();
+       	if(compare(temp))
+    	{
+        	genNew();
+       	}
     }
-    else if (e.keyCode == '39') {
-       if(checkOver(temp))
-       {
-    		end();
-       }
-       else{
-       		shiftRight();
-       		if(compare(temp))
-       		{
-        		genNew();
-       		}
-       }
+    else if (e.keyCode == '39' || e.keyCode == '68') {
+       	shiftRight();
+       	if(compare(temp))
+    	{
+        	genNew();
+       	}
     }
 }
 
 function end()
 {
-	alert("GAME OVER");
+	myGameArea.canvas.style.opacity = "0.3";
+	ctx = myGameArea.context;
+	ctx.font = "95px Times New Roman";
+    ctx.fillStyle = "black";
+    ctx.fillText("GAME OVER", 15, 330);
 }
 
 function genNew()
@@ -587,7 +579,10 @@ function updateGame()
 {
 	myGameArea.clear();
 	grid();
-	
 	document.onkeydown = checkKey;
-	drawGame();
+	drawGame();	
+	if(checkOver(content))
+	{
+		end();
+	}
 }

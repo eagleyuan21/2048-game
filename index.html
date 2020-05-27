@@ -6,8 +6,11 @@
 		<link type="text/css" rel="stylesheet" href="disp.css">
 	</head>
 	
-	<body onload="startGame()">
+	<body>
+		<h1 id="scores">Score: 0</h1>
+		<button onmousedown="startGame()" type="button" style="padding: 12px 28px; font-size: 20px;">Reset Game</button>
 		<script>
+			startGame()
 			updateGame();
 		</script>
 	</body>
