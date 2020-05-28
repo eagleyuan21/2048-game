@@ -1,6 +1,9 @@
 var content;
 var sum;
 
+var xi;
+var yi;
+
 function startGame() {
 	myGameArea.start();
 }
@@ -8,6 +11,7 @@ function startGame() {
 var myGameArea = {
 	canvas : document.createElement("canvas"),
     start : function() {
+    	
     	sum = 0;
     	document.getElementById("scores").innerHTML = "Score: " + sum.toString();
   		var dim;
@@ -62,6 +66,56 @@ var myGameArea = {
 			content[row][col] = value;
 			count = countvalues(content, 0);
 		}
+		
+		this.canvas.addEventListener("touchstart", function(event) {
+    		xi = event.touches[0].clientX;
+  			yi = event.touches[0].clientY;
+		}, false);
+
+		this.canvas.addEventListener("touchend", function(event) {
+ 			var temp = content.map(function(arr) {
+    			return arr.slice();
+			});
+			var x = event.changedTouches[0].pageX;
+  			var y = event.changedTouches[0].pageY;
+  			if(xi - x >= 50 && Math.abs(yi - y) <= 15)
+  			{
+  				shiftLeft();
+       			if(compare(temp))
+    			{
+        			genNew();
+       			}
+       			updateGame();
+  			}
+  			else if(x - xi >= 50 && Math.abs(yi - y) <= 15)
+  			{
+  				shiftRight();
+       			if(compare(temp))
+    			{
+        			genNew();
+       			}
+       			updateGame();
+  			}
+  			else if(yi - y >= 50 && Math.abs(xi - x) <= 15)
+  			{
+  				shiftUp();
+       			if(compare(temp))
+    			{
+        			genNew();
+       			}
+       			updateGame();
+  			}
+  			else if(y - yi >= 50 && Math.abs(xi - x) <= 15)
+  			{
+  				shiftDown();
+       			if(compare(temp))
+    			{
+        			genNew();
+       			}
+       			updateGame();
+  			}
+		}, false);
+    	
     },
     
     clear : function() {
@@ -244,7 +298,10 @@ function getColor(val)
 	return colcode;
 }
 
-
+function sleepFor( sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+}
 
 function shiftLeft()
 {
@@ -479,28 +536,28 @@ function checkKey(e) {
 	});
     e = e || window.event;
 
-    if (e.keyCode == '38' || e.keyCode == '87') {
+    if (e.keyCode == '87') {
     	shiftUp();
        	if(compare(temp))
     	{
         	genNew();
        	}
     }
-    else if (e.keyCode == '40' || e.keyCode == '83') {
+    else if (e.keyCode == '83') {
 		shiftDown();
        	if(compare(temp))
     	{
         	genNew();
        	}
     }
-    else if (e.keyCode == '37' || e.keyCode == '65') {
+    else if (e.keyCode == '65') {
        	shiftLeft();
        	if(compare(temp))
     	{
         	genNew();
        	}
     }
-    else if (e.keyCode == '39' || e.keyCode == '68') {
+    else if (e.keyCode == '68') {
        	shiftRight();
        	if(compare(temp))
     	{
@@ -511,7 +568,7 @@ function checkKey(e) {
 
 function end()
 {
-	myGameArea.canvas.style.opacity = "0.3";
+	myGameArea.canvas.style.opacity = "0.5";
 	ctx = myGameArea.context;
 	ctx.font = "95px Times New Roman";
     ctx.fillStyle = "black";
